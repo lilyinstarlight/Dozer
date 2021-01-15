@@ -11,7 +11,7 @@ from .AbstractSources import Source
 def clean_html(raw_html):
     """Clean all HTML tags.
     From https://stackoverflow.com/questions/9662346/python-code-to-remove-html-tags-from-a-string"""
-    cleanr = re.compile('<.*?>')
+    cleanr = re.compile(r'<.*?>')
     cleantext = re.sub(cleanr, '', raw_html)
     return cleantext
 
@@ -111,7 +111,7 @@ class RSSSource(Source):
                 except ValueError:
                     continue
             if not formatted:
-                data['data'] = datetime.datetime.now()
+                data['date'] = datetime.datetime.now()
         else:
             data['date'] = datetime.datetime.now()
 
