@@ -155,10 +155,10 @@ class News(Cog):
                                           "subscriptions")
         embed.add_field(name="How to add a subscription",
                         value=f"To add a source, for example, Chief Delphi to a channel, you can use the command"
-                              f"`{ctx.bot.command_prefix}news add #channel cd`")
+                              f"`{ctx.prefix}news add #channel cd`")
         embed.add_field(name="Plain text posts",
                         value=f"To use plain text posts instead of embeds, you can use a command like"
-                              f"`{ctx.bot.command_prefix}news add #channel cd plain`")
+                              f"`{ctx.prefix}news add #channel cd plain`")
         embed.add_field(name="Data based sources",
                         value=f"Some sources accept data, like Reddit. To add a reddit subreddit, for example the FRC "
                               f"subreddit you can use the command `{ctx.prefix}news add #channel reddit "
