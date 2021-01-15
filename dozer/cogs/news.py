@@ -348,7 +348,7 @@ class News(Cog):
 
         if not results:
             embed = discord.Embed(title="News Subscriptions for {}".format(ctx.guild.name))
-            embed.description = f"No news subscriptions found for this guild! Add one using `{self.bot.command_prefix}" \
+            embed.description = f"No news subscriptions found for this guild! Add one using `{ctx.prefix}" \
                                 f"news add <channel> <source>`"
             embed.colour = discord.Color.red()
             await ctx.send(embed=embed)
