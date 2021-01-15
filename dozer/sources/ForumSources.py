@@ -36,6 +36,7 @@ class FTCQA(Source):
         'Judging - Judges Interview': 'https://ftcforum.firstinspires.org/forum/ultimate-goal-presented-by-qualcomm/the-judging-process-ac/remote-events-ac/answers-the-judging-process-ab/83808-judges-interview',
         'Judging - Engineering Portfolio': 'https://ftcforum.firstinspires.org/forum/ultimate-goal-presented-by-qualcomm/the-judging-process-ac/remote-events-ac/answers-the-judging-process-ab/83807-engineering-portfolio',
         'Advancement': 'https://ftcforum.firstinspires.org/forum/ultimate-goal-presented-by-qualcomm/advancement-ad/remote-events-ad/answers-advancement-ae/83822-advancement',
+        'FIRST Innovation Challenge Rules': 'https://ftcforum.firstinspires.org/forum/ultimate-goal-presented-by-qualcomm/first-innovation-challenge/post-your-first-innovation-questions-here/answers-first-innovation-award/85412-first-innovation-challenge-rules',
     }
     color = discord.colour.Color.orange()
 
