@@ -10,7 +10,7 @@ import scrapy
 from .AbstractSources import Source
 
 
-class ForumSource(Source):
+class FTCQA(Source):
     """The official FTC Forum Q&A threads"""
     full_name = 'FTC Q&A Answers'
     short_name = 'ftc-qa'
