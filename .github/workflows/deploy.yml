@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  linux:
-    name: Linux Build
+  dockerhub:
+    name: Docker Hub
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
