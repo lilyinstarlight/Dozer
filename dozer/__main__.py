@@ -55,10 +55,10 @@ config = {
 config_file = 'config.json'
 
 if os.path.isfile(config_file):
-    with open(config_file) as f:
+    with open(config_file, 'r') as f:
         config.update(json.load(f))
 
-with open('config.json', 'w') as f:
+with open(config_file, 'w') as f:
     json.dump(config, f, indent='\t')
 
 if config['sentry_url'] != "":
