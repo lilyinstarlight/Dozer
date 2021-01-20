@@ -113,7 +113,7 @@ class FTCQA(Source):
 
     def parse(self, name, url, response, first_time=False):
         """Use scrapy to get data for new posts"""
-        new_items = set()
+        new_items = []
         selector = scrapy.Selector(text=response)
         for post in selector.xpath('//div[has-class("js-post__content-wrapper")]'):
             try:
