@@ -92,19 +92,19 @@ class FTCQA(Source):
 
     async def get_new_posts(self):
         """Fetch the current posts in the feed, parse them for data and generate embeds/strings for them"""
+        new_posts = {
+            'source': {
+                'embed': [],
+                'plain': []
+            }
+        }
         for name, url in self.threads.items():
             response = await self.fetch(url)
             items = self.parse(name, url, response)
-            new_posts = {
-                'source': {
-                    'embed': [],
-                    'plain': []
-                }
-            }
             for data in items:
                 new_posts['source']['embed'].append(self.generate_embed(data))
                 new_posts['source']['plain'].append(self.generate_plain_text(data))
-            return new_posts
+        return new_posts
 
     async def fetch(self, url):
         """Use aiohttp to get the source feed"""
