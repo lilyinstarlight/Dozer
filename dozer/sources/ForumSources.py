@@ -157,7 +157,7 @@ class FTCQA(Source):
             data['author'] = post_asker
             data['description'] = f'FTC Q&A for {name}\n\nAsked by **{post_asker}**:\n\n{post_question}\n\n{post_answer}'
 
-            new_items.add(data)
+            new_items.append(data)
         return new_items
 
     def determine_if_new(self, post):
