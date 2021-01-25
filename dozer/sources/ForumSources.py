@@ -135,6 +135,7 @@ class FTCQA(Source):
             post_content = post.xpath('.//div[has-class("js-post__content-text")]').get()
 
             clean_regex = re.compile(r'<.*?>')
+            newline_regex = re.compile(r'(?<!\n)\n(?!\n)')
 
             content_regex = re.compile(
                 r'.*<div class="bbcode_postedby">\s*Originally posted by(.*?)</div>\s*<div class="message">(.*?)</div>(.*)', re.I | re.M | re.S)
@@ -146,16 +147,16 @@ class FTCQA(Source):
             post_asker, post_question, post_answer = content_match.groups()
 
             post_asker = re.sub(clean_regex, '', post_asker).strip()
-            post_question = html2text.html2text(post_question).strip()
-            post_answer = html2text.html2text(post_answer).strip()
+            post_question = re.sub(newline_regex, '', '\n'.join(line.strip() for line in html2text.html2text(post_question).strip().splitlines()))
+            post_answer = re.sub(newline_regex, '', '\n'.join(line.strip() for line in html2text.html2text(post_answer).strip().splitlines()))
 
             data = {}
 
             data['date'] = post_date
             data['title'] = f'FTC Q&A for {name}'
             data['url'] = f'{url}#{post_id}'
-            data['author'] = post_asker
-            data['description'] = f'FTC Q&A for {name}\n\nAsked by **{post_asker}**:\n\n{post_question}\n\n{post_answer}'
+            data['author'] = 'FTC Q&A Forums'
+            data['description'] = f'Asked by **{post_asker}**:\n\n{post_question}\n\n{post_answer}'
 
             new_items.append(data)
         return new_items
