@@ -1,0 +1,21 @@
+# runtime files
+__pycache__
+*.pyc
+config.json
+dozer.db
+cilog.txt
+
+venv/
+
+.env
+runtime/
+
+# IDEA
+.idea/
+
+# for vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+*~

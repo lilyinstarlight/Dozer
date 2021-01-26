@@ -20,7 +20,8 @@ services:
       - LAVALINK_SERVER_PASSWORD
 
   dozer:
-    image: lilyinstarlight/first-sc-dozer:latest
+    image: dozer:latest
+    build: .
     depends_on:
       postgres:
         condition: service_healthy
