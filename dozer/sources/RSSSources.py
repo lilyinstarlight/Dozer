@@ -1,19 +1,12 @@
 """Given an arbitrary RSS feed, get new posts from it"""
-import re
 import datetime
 import xml.etree.ElementTree
 
 import aiohttp
 import discord
+import html2text
 
 from .AbstractSources import Source
-
-def clean_html(raw_html):
-    """Clean all HTML tags.
-    From https://stackoverflow.com/questions/9662346/python-code-to-remove-html-tags-from-a-string"""
-    cleanr = re.compile(r'<.*?>')
-    cleantext = re.sub(cleanr, '', raw_html)
-    return cleantext
 
 
 class RSSSource(Source):
@@ -115,7 +108,7 @@ class RSSSource(Source):
         else:
             data['date'] = datetime.datetime.now()
 
-        desc = clean_html(data['description'])
+        desc = html2text.html2text(data['description']).strip()
         #length = 1024 - len(self.read_more_str)
         length = 500
         if len(desc) >= length:
