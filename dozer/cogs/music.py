@@ -236,6 +236,8 @@ class InteractiveController(menus.Menu):
 
         await self.bot.invoke(ctx)
 
+        await self.message.remove_reaction(payload.emoji, payload.member)
+
     @menus.button(emoji='\u23F8')
     async def pause_command(self, payload: discord.RawReactionActionEvent):
         """Pause button"""
@@ -245,6 +247,8 @@ class InteractiveController(menus.Menu):
         ctx.command = command
 
         await self.bot.invoke(ctx)
+
+        await self.message.remove_reaction(payload.emoji, payload.member)
 
     @menus.button(emoji='\u23F9')
     async def stop_command(self, payload: discord.RawReactionActionEvent):
@@ -256,6 +260,8 @@ class InteractiveController(menus.Menu):
 
         await self.bot.invoke(ctx)
 
+        await self.message.remove_reaction(payload.emoji, payload.member)
+
     @menus.button(emoji='\u23ED')
     async def skip_command(self, payload: discord.RawReactionActionEvent):
         """Skip button."""
@@ -265,6 +271,8 @@ class InteractiveController(menus.Menu):
         ctx.command = command
 
         await self.bot.invoke(ctx)
+
+        await self.message.remove_reaction(payload.emoji, payload.member)
 
     @menus.button(emoji='\U0001F500')
     async def shuffle_command(self, payload: discord.RawReactionActionEvent):
@@ -276,6 +284,8 @@ class InteractiveController(menus.Menu):
 
         await self.bot.invoke(ctx)
 
+        await self.message.remove_reaction(payload.emoji, payload.member)
+
     @menus.button(emoji='\u2795')
     async def volup_command(self, payload: discord.RawReactionActionEvent):
         """Volume up button"""
@@ -285,6 +295,8 @@ class InteractiveController(menus.Menu):
         ctx.command = command
 
         await self.bot.invoke(ctx)
+
+        await self.message.remove_reaction(payload.emoji, payload.member)
 
     @menus.button(emoji='\u2796')
     async def voldown_command(self, payload: discord.RawReactionActionEvent):
@@ -296,6 +308,8 @@ class InteractiveController(menus.Menu):
 
         await self.bot.invoke(ctx)
 
+        await self.message.remove_reaction(payload.emoji, payload.member)
+
     @menus.button(emoji='\U0001F1F6')
     async def queue_command(self, payload: discord.RawReactionActionEvent):
         """Player queue button."""
@@ -305,6 +319,8 @@ class InteractiveController(menus.Menu):
         ctx.command = command
 
         await self.bot.invoke(ctx)
+
+        await self.message.remove_reaction(payload.emoji, payload.member)
 
 
 class PaginatorSource(menus.ListPageSource):
