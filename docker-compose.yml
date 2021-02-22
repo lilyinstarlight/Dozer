@@ -17,7 +17,9 @@ services:
   lavalink:
     image: fredboat/lavalink:master-v3
     environment:
-      - LAVALINK_SERVER_PASSWORD
+      SERVER_ADDRESS: "0.0.0.0"
+      SERVER_PORT: "2333"
+      LAVALINK_SERVER_PASSWORD: "${LAVALINK_SERVER_PASSWORD}"
 
   dozer:
     image: dozer:latest
