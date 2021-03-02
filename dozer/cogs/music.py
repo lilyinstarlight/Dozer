@@ -507,6 +507,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         for song in tempqueue:
             await player.queue.put(song)
         await ctx.send(f"Removed {removed_song} from queue")
+
+        await player.invoke_controller()
     removefromqueue.example_usage = """
     `{prefix}removefromqueue 5` - removes the 5th song from the queue
     """
@@ -542,6 +544,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         if not player.is_playing:
             await player.set_volume(10) # Prevent Dozer from destroying ears
             await player.do_next()
+
+        await player.invoke_controller()
     play.example_usage = """
     `{prefix}play Steampowered - plays the first result for Steampowered
     """
@@ -673,6 +677,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         await player.set_volume(vol)
         await ctx.send(f'Set the volume to **{vol}**%')
+
+        await player.invoke_controller()
     volume.example_usage = """
     `{prefix}volume 50 - sets the volume to 50%
     """
@@ -721,6 +727,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send('Maximum volume reached')
 
         await player.set_volume(vol)
+
+        await player.invoke_controller()
     vol_up.example_usage = """
     `{prefix}vol_up - turns the volume up by 10
     """
@@ -740,6 +748,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send('Player is currently muted')
 
         await player.set_volume(vol)
+
+        await player.invoke_controller()
     vol_down.example_usage = """
     `{prefix}vol_down - brings the volume down by 10
     """
@@ -840,6 +850,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             else:
                 player.dj = m
                 return await ctx.send(f'{member.mention} is now the DJ.')
+
+        await player.invoke_controller()
     swap_dj.example_usage = """
     `{prefix}swap_dj - swaps the DJ to a random person in the call
     `{prefix}swap_dj tweirtx - swaps the DJ to tweirtx (if they are in the call)
