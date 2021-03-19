@@ -147,8 +147,10 @@ class FTCQA(Source):
             post_asker, post_question, post_answer = content_match.groups()
 
             post_asker = re.sub(clean_regex, '', post_asker).strip()
-            post_question = re.sub(newline_regex, '', '\n'.join(line.strip() for line in html2text.html2text(post_question).strip().splitlines()))
-            post_answer = re.sub(newline_regex, '', '\n'.join(line.strip() for line in html2text.html2text(post_answer).strip().splitlines()))
+            post_question = re.sub(newline_regex, ' ',
+                    '\n'.join(line.strip() for line in html2text.html2text(post_question, bodywidth=0).strip().splitlines()))
+            post_answer = re.sub(newline_regex, ' ',
+                    '\n'.join(line.strip() for line in html2text.html2text(post_answer, bodywidth=0).strip().splitlines()))
 
             data = {}
 
