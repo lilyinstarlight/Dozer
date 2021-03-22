@@ -3,6 +3,7 @@ import re
 import datetime
 
 import aiohttp
+import dateutil.tz
 import discord
 import html2text
 import scrapy
@@ -129,7 +130,8 @@ class FTCQA(Source):
             if not new:
                 continue
 
-            post_date = datetime.datetime.fromisoformat(post.xpath('.//div[has-class("b-post__timestamp")]/time/@datetime').get() + '-08:00')
+            post_date = datetime.datetime.fromisoformat(post.xpath('.//div[has-class("b-post__timestamp")]/time/@datetime').get())
+            post_date = post_date.replace(tzinfo=dateutil.tz.gettz('US/Pacific'))
             post_date = post_date.astimezone(datetime.timezone.utc)
 
             post_content = post.xpath('.//div[has-class("js-post__content-text")]').get()
@@ -147,10 +149,10 @@ class FTCQA(Source):
             post_asker, post_question, post_answer = content_match.groups()
 
             post_asker = re.sub(clean_regex, '', post_asker).strip()
-            post_question = re.sub(newline_regex, ' ',
-                    '\n'.join(line.strip() for line in html2text.html2text(post_question, bodywidth=0).strip().splitlines()))
-            post_answer = re.sub(newline_regex, ' ',
-                    '\n'.join(line.strip() for line in html2text.html2text(post_answer, bodywidth=0).strip().splitlines()))
+            post_question = re.sub(
+                newline_regex, ' ', '\n'.join(line.strip() for line in html2text.html2text(post_question, bodywidth=0).strip().splitlines()))
+            post_answer = re.sub(
+                newline_regex, ' ', '\n'.join(line.strip() for line in html2text.html2text(post_answer, bodywidth=0).strip().splitlines()))
 
             data = {}
 
