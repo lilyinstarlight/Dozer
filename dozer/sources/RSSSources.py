@@ -186,8 +186,8 @@ class FRCQA(RSSSource):
 
 class FTCBlogPosts(RSSSource):
     """The official FTC Blogspot blog"""
-    url = "http://firsttechchallenge.blogspot.com//feeds/posts/default"
-    base_url = "http://firsttechchallenge.blogspot.com/"
+    url = "https://firsttechchallenge.blogspot.com/feeds/posts/default?alt=rss"
+    base_url = "https://firsttechchallenge.blogspot.com/"
     full_name = "FTC Blog Posts"
     short_name = "ftc"
     description = "Official blog posts from the FIRST Tech Challenge"
