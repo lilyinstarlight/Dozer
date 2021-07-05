@@ -9,6 +9,7 @@ from logging import getLogger
 from typing import Union
 
 import discord
+import discord.ext.tasks
 from discord import Forbidden
 from discord.ext.commands import BadArgument, has_permissions, RoleConverter, guild_only
 
