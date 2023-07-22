@@ -6,7 +6,6 @@ dozer.db
 cilog.txt
 
 venv/
-.venv/
 
 .env
 runtime/
@@ -20,9 +19,3 @@ runtime/
 [._]s[a-v][a-z]
 [._]sw[a-p]
 *~
-
-#VSCode
-settings.json
-
-#for mypy
-/.mypy_cache/

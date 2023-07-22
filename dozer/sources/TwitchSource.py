@@ -160,7 +160,7 @@ class TwitchSource(DataBasedSource):
             if stream['id'] not in self.seen_streams:
                 embed = self.generate_embed(stream, games)
                 plain = self.generate_plain_text(stream, games)
-                posts[stream['user_name']] = {
+                posts[stream['user_name'].lower()] = {
                     'embed': [embed],
                     'plain': [plain]
                 }

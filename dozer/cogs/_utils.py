@@ -73,7 +73,7 @@ def group(**kwargs):
 class Group(CommandMixin, commands.HybridGroup):
     """Class for command groups"""
 
-    def command(
+    def command(  # pylint: disable=keyword-arg-before-vararg
         self,
         name: Union[str, app_commands.locale_str] = MISSING,
         *args: typing.Any,
@@ -90,7 +90,7 @@ class Group(CommandMixin, commands.HybridGroup):
 
         return decorator
 
-    def group(
+    def group(  # pylint: disable=keyword-arg-before-vararg
         self,
         name: Union[str, app_commands.locale_str] = MISSING,
         *args: typing.Any,

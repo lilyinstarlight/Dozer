@@ -71,7 +71,7 @@ class General(Cog):
         """Gets the help message for all commands."""
         info = discord.Embed(title='Dozer: Info', description='A guild management bot for FIRST Discord servers',
                              color=discord.Color.blue())
-        info.set_thumbnail(url=self.bot.user.avatar)
+        info.set_thumbnail(url=self.bot.user.display_avatar.url)
         info.add_field(name='About',
                        value="Dozer: A collaborative bot for FIRST Discord servers, developed by the FRC Discord Server Development Team")
         info.add_field(name=f'About `{ctx.prefix}{ctx.invoked_with}`', value=inspect.cleandoc("""

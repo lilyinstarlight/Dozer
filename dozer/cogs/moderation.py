@@ -860,7 +860,7 @@ class Moderation(Cog):
         await ctx.send(ctx.message.author.mention + ', modlog settings configured!')
 
     modlogconfig.example_usage = """
-    `{prefix}modlogconfig #join-leave-logs` - set a channel named #join-leave-logs to log joins/leaves 
+    `{prefix}modlogconfig #join-leave-logs` - set a channel named #join-leave-logs to log joins/leaves
     """
 
     @command()
@@ -886,30 +886,30 @@ class Moderation(Cog):
     @command()
     @has_permissions(administrator=True)
     async def nmconfig(self, ctx: DozerContext, channel_mention: discord.TextChannel, role: discord.Role, *, message,
-                       requireteam=None):
+                       require_team=None):
         """Sets the config for the new members channel"""
         config = await GuildNewMember.get_by(guild_id=ctx.guild.id)
         if len(config) != 0:
             config = config[0]
             config.channel_id = channel_mention.id
             config.role_id = role.id
-            config.require_team = requireteam
+            config.require_team = require_team
             config.message = message.casefold()
 
         else:
             config = GuildNewMember(guild_id=ctx.guild.id, channel_id=channel_mention.id, role_id=role.id,
-                                    message=message.casefold(), require_team=requireteam)
+                                    message=message.casefold(), require_team=require_team)
         await config.update_or_add()
 
         role_name = role.name
         # this should be an embed or something else entirely
         await ctx.send(
             f"New Member Channel configured as: {channel_mention.name}. Role configured as: {role_name}. "
-            f"Team numbers required: {requireteam}. Message: {message}")
+            f"Team numbers required: {require_team}. Message: {message}")
 
     nmconfig.example_usage = """
-    `{prefix}nmconfig #new_members Member I have read the rules and regulations` - Configures the #new_members channel 
-    so if someone types "I have read the rules and regulations" it assigns them the Member role. 
+    `{prefix}nmconfig #new_members Member I have read the rules and regulations` - Configures the #new_members channel
+    so if someone types "I have read the rules and regulations" it assigns them the Member role.
     """
 
     @command()
@@ -1097,7 +1097,7 @@ class Mute(db.DatabaseTable):
         async with db.Pool.acquire() as conn:
             statement = f"""
             INSERT INTO {self.__tablename__} ({", ".join(keys)})
-            VALUES({','.join(f'${i + 1}' for i in range(len(values)))}) 
+            VALUES({','.join(f'${i + 1}' for i in range(len(values)))})
             """
             await conn.execute(statement, *values)
 

@@ -1,26 +1,34 @@
-version: '3'
+version: '3.8'
+
 services:
   postgres:
     image: postgres:14-alpine
     environment:
-      POSTGRES_PASSWORD: simplepass
-      POSTGRES_USER: dozer
-    ports:
-      - "5432:5432"
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     volumes:
-      - database:/var/lib/postgresql/data
+      - '${CONFIG}/database:/var/lib/postgresql/data'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U dozer']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   dozer:
-    depends_on: 
-      - postgres
+    image: dozer:latest
     build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     volumes:
-      - ".:/app"
+      - '${CONFIG}/config:/app/config'
+
   nginx:
     image: nginx
     ports:
-      - "8080:80"
+      - '8000:80'
     volumes:
-      - "./docs/_build/html:/usr/share/nginx/html:ro"
-      
-volumes:
-  database:
+      - './docs/_build/html:/usr/share/nginx/html:ro'

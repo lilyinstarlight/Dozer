@@ -25,7 +25,7 @@ config = {
         'username': 'Put FTC-Events username here',
         'token': 'Put FTC-Events token here'
     },
-    'db_url': 'postgres://dozer_user:simplepass@postgres',
+    'db_url': f'postgres://{os.environ.get("POSTGRES_USER", "dozer")}:{os.environ.get("POSTGRES_PASSWORD", "changeme")}@postgres',
     'gmaps_key': "PUT GOOGLE MAPS API KEY HERE",
     'discord_token': "Put Discord API Token here.",
     'news': {
@@ -44,7 +44,7 @@ config = {
         'enabled': False,
         'host': 'lavalink',
         'port': 2333,
-        'password': 'youshallnotpass',
+        'password': os.environ.get('LAVALINK_SERVER_PASSWORD', 'youshallnotpass'),
         'identifier': 'MAIN',
         'region': 'us_central'
     },
@@ -58,14 +58,14 @@ config = {
 config_file = 'config.json'
 
 if os.path.isfile(config_file):
-    with open(config_file) as f:
+    with open(config_file, 'r') as f:
         config.update(json.load(f))
 
-with open('config.json', 'w') as f:
+with open(config_file, 'w') as f:
     json.dump(config, f, indent='\t')
 
 if config['sentry_url'] != "":
-    sentry_sdk.init(  # pylint: disable=abstract-class-instantiated  # noqa: E0110
+    sentry_sdk.init(  # TODO: remove pylint/noqa once getsentry/sentry-python#1081 is fixed  # pylint: disable=abstract-class-instantiated  # noqa: E0110
         str(config['sentry_url']),
         traces_sample_rate=1.0,
     )

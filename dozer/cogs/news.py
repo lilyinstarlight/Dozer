@@ -80,8 +80,8 @@ class News(Cog):
 
                 if sub.data is None:
                     sub.data = 'source'
-                keys = channel_dict.keys()
-                if sub.data not in keys:
+
+                if sub.data not in channel_dict:
                     channel_dict[sub.data] = {}
 
                 channel_dict[sub.data][channel] = sub.kind
@@ -155,10 +155,10 @@ class News(Cog):
                                           "subscriptions")
         embed.add_field(name="How to add a subscription",
                         value=f"To add a source, for example, Chief Delphi to a channel, you can use the command"
-                              f"`{ctx.bot.command_prefix}news add #channel cd`")
+                              f"`{ctx.prefix}news add #channel cd`")
         embed.add_field(name="Plain text posts",
                         value=f"To use plain text posts instead of embeds, you can use a command like"
-                              f"`{ctx.bot.command_prefix}news add #channel cd plain`")
+                              f"`{ctx.prefix}news add #channel cd plain`")
         embed.add_field(name="Data based sources",
                         value=f"Some sources accept data, like Reddit. To add a reddit subreddit, for example the FRC "
                               f"subreddit you can use the command `{ctx.prefix}news add #channel reddit "
@@ -354,7 +354,7 @@ class News(Cog):
 
         if not results:
             embed = discord.Embed(title=f"News Subscriptions for {ctx.guild.name}")
-            embed.description = f"No news subscriptions found for this guild! Add one using `{self.bot.command_prefix}" \
+            embed.description = f"No news subscriptions found for this guild! Add one using `{ctx.prefix}" \
                                 f"news add <channel> <source>`"
             embed.colour = discord.Color.red()
             await ctx.send(embed=embed)

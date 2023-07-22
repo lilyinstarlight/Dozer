@@ -20,7 +20,7 @@ embed_color = discord.Color(0xed791e)
 __all__ = ['FTCEventsClient', 'FTCInfo', 'setup']
 
 def get_none_strip(s, key):
-    """Ensures that a get always returns a stripped string.""" 
+    """Ensures that a get always returns a stripped string."""
     return (str(s.get(key, "")) or "").strip()
 
 class FTCEventsClient:
@@ -57,7 +57,7 @@ class FTCEventsClient:
                 tries += 1
                 if tries > 3:
                     raise
-    
+
     async def reqjson(self, endpoint, season=None, on_400=None, on_other=None):
         """Reqjson."""
         res = await self.req(endpoint, season=season)
@@ -82,12 +82,12 @@ class FTCEventsClient:
         if kickoff > today:
             return today.year - 1
         return today.year
-    
+
     @staticmethod
     def date_parse(date_str):
         """Takes in date strings from FTC-Events and parses them into a datetime.datetime"""
         return datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
-    
+
     @staticmethod
     def team_fmt(team, team_num=None):
         """TBA-formats a team."""
@@ -102,7 +102,7 @@ class FTCEventsClient:
             # cross out the team
             t = f"~~{t}~~"
         return t
-    
+
     @staticmethod
     def get_url_for_match(szn: int, ecode: str, match: dict):
         """Produces a URL for a match dict + some other info."""
@@ -113,7 +113,7 @@ class FTCEventsClient:
             return base + f"final/{match['series']}/{match['matchNumber']}"
         else:
             return base + f"qualifications/{match['matchNumber']}"
-    
+
     @staticmethod
     def add_schedule_to_embed(embed: discord.Embed, schedule: list, team_num: int, szn: int, ecode: str):
         """Adds a schedule to an embed conditioned on a team number."""
@@ -131,7 +131,7 @@ class FTCEventsClient:
                     blu_alliance.append(team)
                 team_alliance = team_alliance or (team['teamNumber'] == team_num and alliance)
 
-            if not team_alliance: 
+            if not team_alliance:
                 continue
             red_fmt = []
             blu_fmt = []
@@ -139,7 +139,7 @@ class FTCEventsClient:
                 red_fmt.append(FTCEventsClient.team_fmt(team, team_num=team_num))
             for team in blu_alliance:
                 blu_fmt.append(FTCEventsClient.team_fmt(team, team_num=team_num))
-            
+
             red_fmt = ", ".join(red_fmt)
             blu_fmt = ", ".join(blu_fmt)
             red_score = m['scoreRedFinal'] or "0"
@@ -154,10 +154,10 @@ class FTCEventsClient:
                 blu_fmt = f"**{blu_fmt}**"
                 blu_score = f"**{blu_score}**"
                 wincode = "🟦"
-            
+
             field_desc = f"{red_fmt} vs. {blu_fmt}"
 
-            if not played: 
+            if not played:
                 field_title = f"{m['description']}: unplayed"
                 embed.add_field(name=field_title, value=field_desc, inline=False)
                 continue
@@ -176,7 +176,7 @@ class FTCEventsClient:
 
             field_desc = field_desc + f" {wincode} {red_score}-{blu_score}"
             embed.add_field(name=field_title, value=f"[{field_desc}]({FTCEventsClient.get_url_for_match(szn, ecode, m)})", inline=False)
-            
+
 
 
 class FTCInfo(Cog):
@@ -221,7 +221,7 @@ class FTCInfo(Cog):
             if website and not (website.startswith("http://") or website.startswith("https://")):
                 website = "http://" + website
 
-            e = discord.Embed(color=embed_color, 
+            e = discord.Embed(color=embed_color,
                               title=f'FIRST® Tech Challenge Team {team_num}',
                               url=f"https://ftc-events.firstinspires.org/{FTCEventsClient.get_season()}/team/{team_num}")
             e.add_field(name='Name', value=get_none_strip(team_data, 'nameShort') or "_ _")
@@ -241,12 +241,12 @@ class FTCInfo(Cog):
     async def matches(self, ctx: DozerContext, team_num: int, event_name: str = "latest"):
         """Get a match schedule, defaulting to the latest listed event on FTC-Events"""
         szn = FTCEventsClient.get_season()
-        events = await self.ftcevents.reqjson("events?" + urlencode({'teamNumber': str(team_num)}), 
-            on_400=lambda r: ctx.send("This team either did not compete this season, or it does not exist!"), 
+        events = await self.ftcevents.reqjson("events?" + urlencode({'teamNumber': str(team_num)}),
+            on_400=lambda r: ctx.send("This team either did not compete this season, or it does not exist!"),
             on_other=lambda r: ctx.send(f"FTC-Events returned an HTTP error status of: {r.status}. Something is broken."))
         if events is None:
             return
-        
+
         events = events['events']
         if len(events) == 0:
             await ctx.send("This team did not attend any events this season!")
@@ -268,13 +268,13 @@ class FTCInfo(Cog):
                         divisions[e['divisionCode']] = [e['code']]
                     else:
                         divisions[e['divisionCode']].append(e['code'])
-            
+
             for e in events:
                 if e['code'] in divisions:
                     continue
                 event = e
                 break
-            
+
         else:
             for e in events:
                 if e['code'] == event_name:
@@ -282,11 +282,11 @@ class FTCInfo(Cog):
             if event is None:
                 await ctx.send(f"Team {team_num} did not attend {event_name}!")
                 return
-        # 
+        #
         event_url = f"https://ftc-events.firstinspires.org/{szn}/{event['code']}"
-        
+
         # fetch the rankings
-        rank_res = await self.ftcevents.reqjson(f"rankings/{event['code']}?" + urlencode({'teamNumber': str(team_num)}), 
+        rank_res = await self.ftcevents.reqjson(f"rankings/{event['code']}?" + urlencode({'teamNumber': str(team_num)}),
             on_400=lambda r: ctx.send(f"This team somehow competed at an event ({event_url}) that it is not ranked in -- did it no show?"),
             on_other=lambda r: ctx.send(f"FTC-Events returned an HTTP error status of: {r.status}. Something is broken.")
         )
@@ -301,12 +301,12 @@ class FTCInfo(Cog):
             rank = rank_res[0]
             description = f"Rank **{rank['rank']}**\nWLT **{rank['wins']}-{rank['losses']}-{rank['ties']}**\n"\
                             f"QP/TBP1 **{rank['sortOrder1']} / {rank['sortOrder2']}** "
-        
+
         embed = discord.Embed(color=embed_color, title=f"FTC Team {team_num} @ {event['name']}", url=event_url, description=description)
         has_matches_at_all = False
-        
+
         # fetch the quals match schedule
-        req = await self.ftcevents.reqjson(f"schedule/{event['code']}/qual/hybrid", 
+        req = await self.ftcevents.reqjson(f"schedule/{event['code']}/qual/hybrid",
             on_other=lambda r: ctx.send(f"FTC-Events returned an HTTP error status of: {req.status}. Something is broken."))
 
         if req is None:
@@ -316,7 +316,7 @@ class FTCInfo(Cog):
         FTCEventsClient.add_schedule_to_embed(embed, res, team_num, szn, event['code'])
 
         # fetch the playoffs match schedule
-        req = await self.ftcevents.reqjson(f"schedule/{event['code']}/playoff/hybrid", 
+        req = await self.ftcevents.reqjson(f"schedule/{event['code']}/playoff/hybrid",
             on_other=lambda r: ctx.send(f"FTC-Events returned an HTTP error status of: {req.status}. Something is broken."))
 
         if req is None:
@@ -324,10 +324,10 @@ class FTCInfo(Cog):
         res = req['schedule']
         has_matches_at_all = has_matches_at_all or bool(res)
         FTCEventsClient.add_schedule_to_embed(embed, res, team_num, szn, event['code'])
-        
+
         if not has_matches_at_all:
             embed.description = "_No match schedule is available yet._"
-            
+
         await ctx.send(embed=embed)
 
     matches.example_usage = """

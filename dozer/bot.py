@@ -117,7 +117,7 @@ class Dozer(commands.Bot):
                 logger.error('Error in command <{c.command}> ({g.name!r}({g.id}) {chn}({chn.id}) {a}({a.id}) {c.message.content})'.format(
                              c=context, g=context.guild, a=context.author, chn=context.channel))
             else:
-                logger.error('Error in command <{c.command}> (DM {recipient}({recipient.id}) {content})'.format( 
+                logger.error('Error in command <{c.command}> (DM {recipient}({recipient.id}) {content})'.format(
                               c=context, recipient=context.channel.recipient, content=context.message.content))
             logger.error(''.join(traceback.format_exception(type(exception), exception, exception.__traceback__)))
 
@@ -164,7 +164,7 @@ class Dozer(commands.Bot):
         await super().close()
         for ses in self.aiohttp_sessions:
             await ses.close()
-    
+
     def add_aiohttp_ses(self, ses):
         """add an aiohttp session to the session registry"""
         self.aiohttp_sessions.append(ses)

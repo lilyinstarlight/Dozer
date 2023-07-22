@@ -62,8 +62,8 @@ class CustomJoinLeaveMessages(db.DatabaseTable):
         async with db.Pool.acquire() as conn:
             await conn.execute(f"""
             CREATE TABLE {cls.__tablename__} (
-            guild_id bigint PRIMARY KEY NOT NULL,	            
-            memberlog_channel bigint NOT NULL,	   
+            guild_id bigint PRIMARY KEY NOT NULL,
+            memberlog_channel bigint NOT NULL,
             name varchar NOT NULL,
             send_on_verify boolean
             )""")

@@ -158,7 +158,7 @@ class Fun(Cog):
             emoji = None
 
             def reaction_check(reaction, reactor):
-                if (reaction.emoji == "✅" or reaction.emoji == "❌") and reactor == opponent and reaction.message == msg:
+                if reaction.emoji in ("✅", "❌") and reactor == opponent and reaction.message == msg:
                     nonlocal emoji
                     emoji = reaction.emoji
                     return True

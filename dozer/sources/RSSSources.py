@@ -1,20 +1,12 @@
 """Given an arbitrary RSS feed, get new posts from it"""
 import datetime
-import re
 import xml.etree.ElementTree
 
 import aiohttp
 import discord
+import html2text
 
 from .AbstractSources import Source
-
-
-def clean_html(raw_html):
-    """Clean all HTML tags.
-    From https://stackoverflow.com/questions/9662346/python-code-to-remove-html-tags-from-a-string"""
-    cleanr = re.compile('<.*?>')
-    cleantext = re.sub(cleanr, '', raw_html)
-    return cleantext
 
 
 class RSSSource(Source):
@@ -29,6 +21,10 @@ class RSSSource(Source):
     def __init__(self, aiohttp_session: aiohttp.ClientSession, bot):
         super().__init__(aiohttp_session, bot)
         self.guids_seen: set = set()
+
+        self.html2text = html2text.HTML2Text()
+        self.html2text.body_width = 0
+        self.html2text.emphasis_mark = '*'
 
     async def first_run(self):
         """Fetch the current posts in the feed and add them to the guids_seen set"""
@@ -112,11 +108,11 @@ class RSSSource(Source):
                 except ValueError:
                     continue
             if not formatted:
-                data['data'] = datetime.datetime.now()
+                data['date'] = datetime.datetime.now()
         else:
             data['date'] = datetime.datetime.now()
 
-        desc = clean_html(data['description'])
+        desc = self.html2text.handle(data['description']).strip()
         # length = 1024 - len(self.read_more_str)
         length = 500
         if len(desc) >= length:
@@ -191,7 +187,6 @@ class FRCQA(RSSSource):
     description = "Answers from the official FIRST Robotics Competition Q&A system"
     color = discord.colour.Color.dark_blue()
 
-
 class FTCQA(RSSSource):
     """Answers from the official FIRST Tech Challenge Q&A system"""
     url = "https://ftc-qa.firstinspires.org/rss/answers.rss"
@@ -204,8 +199,8 @@ class FTCQA(RSSSource):
 
 class FTCBlogPosts(RSSSource):
     """The official FTC Blogspot blog"""
-    url = "http://firsttechchallenge.blogspot.com//feeds/posts/default"
-    base_url = "http://firsttechchallenge.blogspot.com/"
+    url = "https://firsttechchallenge.blogspot.com/feeds/posts/default?alt=rss"
+    base_url = "https://firsttechchallenge.blogspot.com/"
     full_name = "FTC Blog Posts"
     short_name = "ftc"
     description = "Official blog posts from the FIRST Tech Challenge"
@@ -228,7 +223,7 @@ class JVNBlog(RSSSource):
     base_url = "https://johnvneun.com/"
     full_name = "JVN's Blog"
     short_name = "jvn"
-    aliases = '148', 'robowranglers'
+    aliases = ('148', 'robowranglers')
     description = "Blog posts by John V Neun, 148 Head Engineer"
     color = discord.colour.Color(value=000000)
     disabled = True # He locked his blog
@@ -240,7 +235,7 @@ class SpectrumBlog(RSSSource):
     base_url = "http://spectrum3847.org/category/blog/"
     full_name = "Spectrum Blog"
     short_name = "spectrum"
-    aliases = '3847'
+    aliases = ('3847',)
     description = "Blog Posts from team 3847, Spectrum"
     color = discord.colour.Color.purple()
 

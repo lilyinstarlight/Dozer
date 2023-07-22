@@ -10,8 +10,8 @@ import async_timeout
 import discord
 from discord.ext import commands
 from discord.utils import escape_markdown
-
 from dozer.context import DozerContext
+
 from ._utils import *
 
 embed_color = discord.Color(0xf89808)

@@ -6,7 +6,7 @@ import typing
 import discord
 import discord.utils
 from discord.ext import commands
-from discord.ext.commands import cooldown, BucketType, has_permissions, BadArgument, guild_only
+from discord.ext.commands import cooldown, BucketType, has_permissions, BadArgument, guild_only, before_invoke
 from discord.utils import escape_markdown
 
 from dozer.context import DozerContext
@@ -21,15 +21,6 @@ blurple = discord.Color.blurple()
 
 class Roles(Cog):
     """Commands for role management."""
-
-    def __init__(self, bot: commands.Bot):
-        super().__init__(bot)
-        for loop_command in self.giveme.walk_commands():
-            @loop_command.before_invoke  # pylint: disable=cell-var-from-loop
-            async def givemeautopurge(self, ctx: DozerContext):
-                """Before invoking a giveme command, run a purge"""
-                if await self.ctx_purge(ctx):
-                    await ctx.send("Purged missing roles")
 
     @staticmethod
     def calculate_epoch_time(time_string: str):
@@ -233,8 +224,14 @@ class Roles(Cog):
         rolelist = [role]
         await self.giveme_purge(rolelist)
 
+    async def givemeautopurge(self, ctx):
+        """Before invoking a giveme command, run a purge"""
+        if await self.ctx_purge(ctx):
+            await ctx.send("Purged missing roles")
+
     @group(invoke_without_command=True)
     @bot_has_permissions(manage_roles=True)
+    @before_invoke(givemeautopurge)
     async def giveme(self, ctx: DozerContext, *, roles):
         """Give you one or more giveable roles, separated by commas."""
         norm_names = [self.normalize(name) for name in roles.split(',')]
@@ -298,6 +295,7 @@ class Roles(Cog):
     @giveme.command()
     @bot_has_permissions(manage_roles=True)
     @has_permissions(manage_roles=True)
+    @before_invoke(givemeautopurge)
     async def purge(self, ctx: DozerContext):
         """Force a purge of giveme roles that no longer exist in the guild"""
         counter = await self.ctx_purge(ctx)
@@ -306,6 +304,7 @@ class Roles(Cog):
     @giveme.command()
     @bot_has_permissions(manage_roles=True)
     @has_permissions(manage_guild=True)
+    @before_invoke(givemeautopurge)
     async def add(self, ctx: DozerContext, *, name: str):
         """Makes an existing role giveable, or creates one if it doesn't exist. Name must not contain commas.
         Similar to create, but will use an existing role if one exists."""
@@ -334,6 +333,7 @@ class Roles(Cog):
     @giveme.command()
     @bot_has_permissions(manage_roles=True)
     @has_permissions(manage_guild=True)
+    @before_invoke(givemeautopurge)
     async def create(self, ctx: DozerContext, *, name: str):
         """Create a giveable role. Name must not contain commas.
         Similar to add, but will always create a new role."""
@@ -357,6 +357,7 @@ class Roles(Cog):
 
     @giveme.command()
     @bot_has_permissions(manage_roles=True)
+    @before_invoke(givemeautopurge)
     async def remove(self, ctx: DozerContext, *, roles):
         """Removes multiple giveable roles from you. Names must be separated by commas."""
         norm_names = [self.normalize(name) for name in roles.split(',')]
@@ -418,6 +419,7 @@ class Roles(Cog):
     @giveme.command()
     @bot_has_permissions(manage_roles=True)
     @has_permissions(manage_guild=True)
+    @before_invoke(givemeautopurge)
     async def delete(self, ctx: DozerContext, *, name: str):
         """Deletes and removes a giveable role."""
         if ',' in name:
@@ -446,6 +448,7 @@ class Roles(Cog):
     @cooldown(1, 10, BucketType.channel)
     @giveme.command(name='list')
     @bot_has_permissions(manage_roles=True)
+    @before_invoke(givemeautopurge)
     async def list_roles(self, ctx: DozerContext):
         """Lists all giveable roles for this server."""
         names = [tup.name for tup in await GiveableRole.get_by(guild_id=ctx.guild.id)]
@@ -465,6 +468,7 @@ class Roles(Cog):
     @giveme.command()
     @bot_has_permissions(manage_roles=True)
     @has_permissions(manage_guild=True)
+    @before_invoke(givemeautopurge)
     async def removefromlist(self, ctx: DozerContext, *, name: str):
         """Deletes and removes a giveable role."""
         # Honestly this is the giveme delete command but modified to only delete from the DB
